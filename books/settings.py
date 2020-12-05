@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'django_filters',
+    'social_django',
 
     'store',
 ]
@@ -104,6 +106,9 @@ DATABASES = {
     }
 }
 
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -123,6 +128,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -141,3 +151,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SOCIAL_AUTH_GITHUB_KEY = 'a84295956025d2e64719'
+SOCIAL_AUTH_GITHUB_SECRET = '566f7779a14608ca3b89c150ae2bd5e931b96967'
