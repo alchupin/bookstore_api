@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 
-from store.models import Book
+from store.models import Book, UserBookRelation
 from store.serializers import BookSerializer
 
 
@@ -100,3 +100,31 @@ class BookApiTestCase(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
         self.assertEqual(2, Book.objects.count())
+
+
+class BookRelationApiTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create(username='test_username')
+        self.user2 = User.objects.create(username='test_username2')
+        self.user_staff = User.objects.create(username='test_staff_username', is_staff=True)
+        self.book_1 = Book.objects.create(name='Clean coder', price=500.00, author='author_1')
+        self.book_2 = Book.objects.create(name='Clean code', price=600.00, author='author_2')
+        self.book_3 = Book.objects.create(name='Code complete', price=1000.00, author='author_3')
+
+    def test_like_bookmarks(self):
+        url = reverse('userbookrelation-detail', args=(self.book_1.id,))
+        data = {"like": True}
+        json_data = json.dumps(data)
+        self.client.force_login(self.user)
+        response = self.client.patch(url, data=json_data, content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        relation = UserBookRelation.objects.get(user=self.user, book=self.book_1)
+        self.assertTrue(relation.like)
+
+        url = reverse('userbookrelation-detail', args=(self.book_1.id,))
+        data = {"in_bookmarks": True}
+        json_data = json.dumps(data)
+        response = self.client.patch(url, data=json_data, content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        relation = UserBookRelation.objects.get(user=self.user, book=self.book_1)
+        self.assertTrue(relation.in_bookmarks)
