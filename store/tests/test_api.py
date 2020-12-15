@@ -128,3 +128,23 @@ class BookRelationApiTestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         relation = UserBookRelation.objects.get(user=self.user, book=self.book_1)
         self.assertTrue(relation.in_bookmarks)
+
+    def test_rate(self):
+        url = reverse('userbookrelation-detail', args=(self.book_1.id,))
+        data = {"rate": 3}
+        json_data = json.dumps(data)
+        self.client.force_login(self.user)
+        response = self.client.patch(url, data=json_data, content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        relation = UserBookRelation.objects.get(user=self.user, book=self.book_1)
+        self.assertEqual(3, relation.rate)
+
+    def test_rate_wrong(self):
+        url = reverse('userbookrelation-detail', args=(self.book_1.id,))
+        data = {"rate": 3}
+        json_data = json.dumps(data)
+        self.client.force_login(self.user)
+        response = self.client.patch(url, data=json_data, content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        relation = UserBookRelation.objects.get(user=self.user, book=self.book_1)
+        self.assertEqual(3, relation.rate)
