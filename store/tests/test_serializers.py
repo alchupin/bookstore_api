@@ -19,22 +19,23 @@ class BookSerializerTestCase(TestCase):
                 'id': self.book_1.id,
                 'name': 'Clean coder',
                 'price': '500.00',
-                'author': 'Robert C. Martin'
+                'author': 'Robert C. Martin',
+                'likes_count': 0
             },
             {
                 'id': self.book_2.id,
                 'name': 'Clean code',
                 'price': '600.00',
-                'author': 'Robert C. Martin'
+                'author': 'Robert C. Martin',
+                'likes_count': 0
             },
             {
                 'id': self.book_3.id,
                 'name': 'Code complete',
                 'price': '1000.00',
-                'author': 'Steve McConnell'
+                'author': 'Steve McConnell',
+                'likes_count': 0
             }
         ]
-        print(data)
-        print(expected_data)
 
         self.assertEqual(expected_data, data)
