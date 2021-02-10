@@ -8,6 +8,8 @@ class BookAdmin(admin.ModelAdmin):
     list_display = ('name', 'author', 'price')
 
 
+
+
 admin.site.register(Book, BookAdmin)
 
 

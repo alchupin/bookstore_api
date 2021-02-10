@@ -3,11 +3,15 @@ from django.contrib.auth.models import User
 
 
 class Book(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name='Книга')
     price = models.DecimalField(max_digits=7, decimal_places=2)
     author = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='books_created_by_user')
     readers = models.ManyToManyField(User, through='UserBookRelation', related_name='books_read_by_user')
+
+    class Meta:
+        verbose_name = 'Книга'
+        verbose_name_plural = 'Книги'
 
     def __str__(self):
         return f'Title: {self.name}'
